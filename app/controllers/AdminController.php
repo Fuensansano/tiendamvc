@@ -44,17 +44,15 @@ class AdminController extends Controller
             $errors[] = 'La contraseña es requerida';
         }
 
+        // TODO: intentar simplificar comprobación de errores
         if ( ! $errors ) {
-
             $errors = $this->model->verifyUser($dataForm);
 
             if ( ! $errors ) {
-
                 $session = new Session();
                 $session->login($dataForm);
                 header("LOCATION:" . ROOT . 'AdminShop');
             }
-
         }
 
         $this->index($dataForm,$errors);
