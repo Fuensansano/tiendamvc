@@ -47,4 +47,31 @@ class AdminUser
 
         return $query->rowCount();
     }
+
+    public function getUsers()
+    {
+        $sql = 'SELECT * FROM admins WHERE deleted = 0';
+        $query = $this->db->prepare($sql);
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function getUserById($id)
+    {
+        $sql = 'SELECT * FROM admins WHERE id=:id';
+        $query = $this->db->prepare($sql);
+        $query->execute([':id' => $id]);
+
+        return $query->fetch(PDO::FETCH_OBJ);
+    }
+
+    public function getConfig($type)
+    {
+        $sql = 'SELECT * FROM config WHERE type=:type ORDER BY value DESC';
+        $query = $this->db->prepare($sql);
+        $query->execute([':type' => $type]);
+
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
 }

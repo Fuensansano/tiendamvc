@@ -23,7 +23,7 @@ class Application
             require_once '../app/controllers/' . $controller . '.php';
             $this->urlController = new $controller;
 
-            if (method_exists($this->urlController, $this->urlAction ?? '') &&
+            if (method_exists($this->urlController, $this->urlAction) &&
                 is_callable(array($this->urlController, $this->urlAction))) {
                 if ( ! empty($this->urlParams) ) {
                     call_user_func_array(array($this->urlController, $this->urlAction), $this->urlParams);
@@ -31,7 +31,7 @@ class Application
                     $this->urlController->{$this->urlAction}();
                 }
             } else {
-                if (strlen($this->urlAction)  == 0) {
+                if (strlen($this->urlAction) == 0) {
                     $this->urlController->index();
                 } else {
                     header('HTTP/1.0 404 Not Found');

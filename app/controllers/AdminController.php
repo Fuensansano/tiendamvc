@@ -9,12 +9,13 @@ class AdminController extends Controller
         $this->model = $this->model('Admin');
     }
 
-    public function index()
+    public function index($dataForm = [],$errors = [])
     {
         $data = [
             'titulo' => 'Administración',
             'menu' => false,
-            'data' => [],
+            'data' => $dataForm,
+            'errors' => $errors,
         ];
 
         $this->view('admin/index', $data);
@@ -22,43 +23,41 @@ class AdminController extends Controller
 
     public function verifyUser()
     {
-       $errors = [];
-       $dataForm = [];
+        $errors = [];
+        $dataForm = [];
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+            $this->index();
+            return;
+        }
 
-       if ($_SERVER['REQUEST_METHOD'] == 'post'){
+        $user = $_POST['user'] ?? '';
+        $password = $_POST['password'] ?? '';
 
-           $user = $_POST['user'] ?? '';
-           $password = $_POST['password'] ?? '';
-           $dataForm = [
-               'user' => $user,
-               'password' => $password,
-           ];
-
-           if (empty($user)) {
-               array_push($errors,"El usuario es requerido");
-           }
-           if (empty($password)) {
-               array_push($errors,"la contraseña es requerida");
-           }
-
-           if ( ! $errors) {
-
-               $errors = $this->model->verifyUser($dataForm);
-
-               if ( ! $errors) {
-
-               }
-           }
-       }
-
-        $data = [
-            'titulo' => 'Administración - Inicio',
-            'menu' => false,
-            'errors' => $errors,
-            'admin' => true,
-            'data' => [],
+        $dataForm = [
+            'user' => $user,
+            'password' => $password,
         ];
+        if(empty($user)) {
+            array_push($errors, 'El usuario es requerido');
+        }
+        if(empty($password)) {
+            array_push($errors, 'La contraseña es requerida');
+        }
 
-        $this->view('admin/index', $data);
+        if ( ! $errors ) {
+
+            $errors = $this->model->verifyUser($dataForm);
+
+            if ( ! $errors ) {
+
+                $session = new Session();
+                $session->login($dataForm);
+                header("LOCATION:" . ROOT . 'AdminShop');
+            }
+
+        }
+
+        $this->index($dataForm,$errors);
+
     }
 }
