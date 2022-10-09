@@ -38,10 +38,10 @@ class AdminController extends Controller
             'password' => $password,
         ];
         if(empty($user)) {
-            array_push($errors, 'El usuario es requerido');
+            $errors[] = 'El usuario es requerido';
         }
         if(empty($password)) {
-            array_push($errors, 'La contraseña es requerida');
+            $errors[] = 'La contraseña es requerida';
         }
 
         if ( ! $errors ) {
