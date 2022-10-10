@@ -127,9 +127,6 @@ class AdminUserController extends Controller
         print 'Eliminación de usuarios';
     }
 
-    /**
-     * @return void
-     */
     public function showCreateAdminUserForm(): void
     {
         $data = [

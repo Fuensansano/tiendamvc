@@ -302,42 +302,28 @@ class LoginController extends Controller
     }
 
 
-
     public function verifyUser()
     {
-        $errors = [];
-
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
             $this->index();
             return;
         }
 
-        $user = $_POST['user'] ?? '';
+        $email = $_POST['user'] ?? '';
         $password = $_POST['password'] ?? '';
         $remember = isset($_POST['remember']) ? 'on' : 'off';
 
-        $errors = $this->model->verifyUser($user, $password);
-
-        $value = $user . '|' . $password;
-        if ($remember == 'on') {
-            $date = time() + (60*60*24*7);
-        } else {
-            $date = time() - 1;
-        }
-        setcookie('shoplogin', $value, $date);
-
         $dataForm = [
-            'user' => $user,
+            'user' => $email,
             'remember' => $remember,
         ];
 
-        if ( ! $errors ) {
-            $data = $this->model->getUserByEmail($user);
-            $session = new Session();
-            $session->login($data);
+        $user = $this->model->getUserByEmail($email);
 
-            header("location:" . ROOT . 'shop');
-        } else {
+        $errors = [];
+
+        if ( ! $user ) {
+            $errors[] = 'El usuario no existe en nuestros registros';
             $data = [
                 'titulo' => 'Login',
                 'menu'   => false,
@@ -345,7 +331,28 @@ class LoginController extends Controller
                 'data' => $dataForm,
             ];
             $this->view('login', $data);
+            return;
         }
+
+        $errors = $this->model->verifyUserPassword($user, $password);
+
+        if ($errors) {
+            $data = [
+                'titulo' => 'Login',
+                'menu'   => false,
+                'errors' => $errors,
+                'data' => $dataForm,
+            ];
+            $this->view('login', $data);
+            return;
+        }
+
+        $this->setShopLoginCookie($email, $password, $remember);
+
+        $session = new Session();
+        $session->login($user);
+
+        header("location:" . ROOT . 'shop');
     }
 
 
@@ -384,5 +391,17 @@ class LoginController extends Controller
         ];
 
         $this->view('changepassword', $data);
+    }
+
+
+    public function setShopLoginCookie($email, $password, $remember): void
+    {
+        $value = $email . '|' . $password;
+        if ($remember == 'on') {
+            $date = time() + (60 * 60 * 24 * 7);
+        } else {
+            $date = time() - 1;
+        }
+        setcookie('shoplogin', $value, $date);
     }
 }

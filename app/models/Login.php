@@ -99,17 +99,13 @@ class Login
         return $query->execute($params);
     }
 
-    public function verifyUser($email, $password)
+    public function verifyUserPassword($user, $password)
     {
         $errors = [];
 
-        $user = $this->getUserByEmail($email);
-
         $pass = hash_hmac('sha512', $password, ENCRIPTKEY);
 
-        if ( ! $user ) {
-            $errors[] = 'El usuario no existe en nuestros registros';
-        } elseif ($user->password != $pass) {
+        if ($user->password != $pass) {
             $errors[] ='La contraseña no es correcta';
         }
 
