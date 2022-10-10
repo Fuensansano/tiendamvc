@@ -307,50 +307,45 @@ class LoginController extends Controller
     {
         $errors = [];
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            $user = $_POST['user'] ?? '';
-            $password = $_POST['password'] ?? '';
-            $remember = isset($_POST['remember']) ? 'on' : 'off';
-
-            $errors = $this->model->verifyUser($user, $password);
-
-            $value = $user . '|' . $password;
-            if ($remember == 'on') {
-                $date = time() + (60*60*24*7);
-            } else {
-                $date = time() - 1;
-            }
-            setcookie('shoplogin', $value, $date);
-
-            $dataForm = [
-                'user' => $user,
-                'remember' => $remember,
-            ];
-
-            if ( ! $errors ) {
-                $data = $this->model->getUserByEmail($user);
-                $session = new Session();
-                $session->login($data);
-
-                header("location:" . ROOT . 'shop');
-            } else {
-                $data = [
-                    'titulo' => 'Login',
-                    'menu'   => false,
-                    'errors' => $errors,
-                    'data' => $dataForm,
-                ];
-                $this->view('login', $data);
-            }
-
-        } else {
-
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
             $this->index();
-
+            return;
         }
 
+        $user = $_POST['user'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $remember = isset($_POST['remember']) ? 'on' : 'off';
 
+        $errors = $this->model->verifyUser($user, $password);
+
+        $value = $user . '|' . $password;
+        if ($remember == 'on') {
+            $date = time() + (60*60*24*7);
+        } else {
+            $date = time() - 1;
+        }
+        setcookie('shoplogin', $value, $date);
+
+        $dataForm = [
+            'user' => $user,
+            'remember' => $remember,
+        ];
+
+        if ( ! $errors ) {
+            $data = $this->model->getUserByEmail($user);
+            $session = new Session();
+            $session->login($data);
+
+            header("location:" . ROOT . 'shop');
+        } else {
+            $data = [
+                'titulo' => 'Login',
+                'menu'   => false,
+                'errors' => $errors,
+                'data' => $dataForm,
+            ];
+            $this->view('login', $data);
+        }
     }
 
 

@@ -4,7 +4,7 @@
         <h1 class="text-center">Registro</h1>
     </div>
     <div class="card-body">
-        <form action="<?= ROOT ?>login/registro/" method="post">
+        <form action="<?= ROOT ?>login/register/" method="post">
             <div class="form-group text-left">
                 <label for="first_name">Nombre:</label>
                 <input type="text" name="first_name" id="first_name" class="form-control"

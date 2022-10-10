@@ -13,17 +13,16 @@ class AdminShopController extends Controller
     {
         $session = new Session();
 
-        if ($session->getLogin()) {
-            $data = [
-                'titulo' => 'Bienvenid@ a la administración de la tienda',
-                'menu' => false,
-                'admin' => true,
-                'subtitle' => 'Administración de la tienda',
-            ];
-            $this->view('admin/shop/index', $data);
-        } else {
-            header('LOCATION:' . ROOT . 'admin');
-        }
+        $session->redirectIfNotLogin(ROOT . 'admin');
+
+        $data = [
+            'titulo' => 'Bienvenid@ a la administración de la tienda',
+            'menu' => false,
+            'admin' => true,
+            'subtitle' => 'Administración de la tienda',
+        ];
+
+        $this->view('admin/shop/index', $data);
 
     }
 }

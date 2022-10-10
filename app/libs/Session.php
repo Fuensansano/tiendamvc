@@ -44,4 +44,11 @@ class Session
     {
         return $this->user;
     }
+
+    public function redirectIfNotLogin($whereToRedirect): void
+    {
+        if ( ! $this->login) {
+            header('LOCATION: ' . $whereToRedirect);
+        }
+    }
 }
