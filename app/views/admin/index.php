@@ -4,7 +4,7 @@
         <h1 class="text-center">Módulo de Administración</h1>
     </div>
     <div class="card-body">
-        <form action="<?= ROOT ?>admin/verifyUser" method="post">
+        <form action="<?= ROOT ?>admin/loginAdminInShop" method="post">
             <div class="form-group text-left">
                 <label for="user">Usuario:</label>
                 <input type="text" name="user" class="form-control"

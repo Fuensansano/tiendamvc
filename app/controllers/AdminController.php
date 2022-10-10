@@ -21,7 +21,7 @@ class AdminController extends Controller
         $this->view('admin/index', $data);
     }
 
-    public function verifyUser()
+    public function loginAdminInShop()
     {
         $errors = [];
         $dataForm = [];
