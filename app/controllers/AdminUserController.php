@@ -13,22 +13,17 @@ class AdminUserController extends Controller
     {
         $session = new Session();
 
-        if ($session->getLogin()) {
+        $session->redirectIfNotLogin( ROOT . 'admin');
 
-            $users = $this->model->getUsers();
+        $users = $this->model->getUsers();
+        $data = [
+            'titulo' => 'Administración de Usuarios',
+            'menu' => false,
+            'admin' => true,
+            'users' => $users,
+        ];
 
-            $data = [
-                'titulo' => 'Administración de Usuarios',
-                'menu' => false,
-                'admin' => true,
-                'users' => $users,
-            ];
-
-            $this->view('admin/users/index', $data);
-        } else {
-            header('LOCATION:' . ROOT . 'admin');
-        }
-
+        $this->view('admin/users/index', $data);
     }
 
     public function create()
