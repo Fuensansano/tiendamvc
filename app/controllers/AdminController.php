@@ -30,30 +30,32 @@ class AdminController extends Controller
             return;
         }
 
-        $user = $_POST['user'] ?? '';
+        $email = $_POST['user'] ?? '';
         $password = $_POST['password'] ?? '';
 
         $dataForm = [
-            'user' => $user,
+            'user' => $email,
             'password' => $password,
         ];
 
-        if(empty($user)) {
+        if(empty($email)) {
             $errors[] = 'El usuario es requerido';
         }
         if(empty($password)) {
             $errors[] = 'La contraseña es requerida';
         }
 
-        // TODO: intentar simplificar comprobación de errores
-        if ( ! $errors ) {
-            $errors = $this->model->verifyUser($user, $password);
+        if ($errors) {
+            $this->index($dataForm,$errors);
+            return;
+        }
 
-            if ( ! $errors ) {
-                $session = new Session();
-                $session->login($dataForm);
-                header("LOCATION:" . ROOT . 'AdminShop');
-            }
+        $errors = $this->model->verifyUser($email, $password);
+
+        if ( ! $errors ) {
+            $session = new Session();
+            $session->login($dataForm);
+            header("LOCATION:" . ROOT . 'AdminShop');
         }
 
         $this->index($dataForm,$errors);
