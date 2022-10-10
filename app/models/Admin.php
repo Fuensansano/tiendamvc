@@ -15,29 +15,43 @@ class Admin
 
         $password = hash_hmac('sha512', $data['password'], ENCRIPTKEY);
 
+        $admins = $this->findUserByEmail($data);
+
+        if ( ! $admins ) {
+            $errors[] = 'El usuario no existe en nuestros registros';
+        } elseif (count($admins) > 1) {
+            $errors[] ='El correo electrónico está duplicado';
+        } elseif ($password != $admins[0]->password) {
+            $errors[] = 'La clave de acceso no es correcta';
+        } else {
+
+            $errors = $this->updateLastLogin($admins[0], $errors);
+        }
+        return $errors;
+    }
+
+
+    public function findUserByEmail($data): array|false
+    {
         $sql = 'SELECT * FROM admins WHERE email=:email';
         $query = $this->db->prepare($sql);
         $query->bindParam(':email', $data['user'], PDO::PARAM_STR);
         $query->execute();
         $admins = $query->fetchAll(PDO::FETCH_OBJ);
+        return $admins;
+    }
 
-        if ( ! $admins ) {
-            array_push($errors, 'El usuario no existe en nuestros registros');
-        } elseif (count($admins) > 1) {
-            array_push($errors, 'El correo electrónico está duplicado');
-        } elseif ($password != $admins[0]->password) {
-            array_push($errors, 'La clave de acceso no es correcta');
-        } else {
 
-            $sql2 = 'UPDATE admins SET login_at=:login WHERE id=:id';
-            $query2 = $this->db->prepare($sql2);
-            $params = [
-                ':login' => date('Y-m-d H:i:s'),
-                ':id' => $admins[0]->id,
-            ];
-            if ( ! $query2->execute($params)) {
-                 array_push($errors, 'Error al modificar la fecha de último acceso');
-            }
+    public function updateLastLogin($admins, $errors): array
+    {
+        $sql2 = 'UPDATE admins SET login_at=:login WHERE id=:id';
+        $query2 = $this->db->prepare($sql2);
+        $params = [
+            ':login' => date('Y-m-d H:i:s'),
+            ':id' => $admins->id,
+        ];
+        if (!$query2->execute($params)) {
+            $errors[] = 'Error al modificar la fecha de último acceso';
         }
         return $errors;
     }

@@ -108,9 +108,9 @@ class Login
         $pass = hash_hmac('sha512', $password, ENCRIPTKEY);
 
         if ( ! $user ) {
-            array_push($errors, 'El usuario no existe en nuestros registros');
+            $errors[] = 'El usuario no existe en nuestros registros';
         } elseif ($user->password != $pass) {
-            array_push($errors, 'La contraseña no es correcta');
+            $errors[] ='La contraseña no es correcta';
         }
 
         return $errors;

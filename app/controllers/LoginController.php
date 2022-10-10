@@ -45,15 +45,15 @@ class LoginController extends Controller
         $email = $_POST['email'] ?? '';
 
         if ($email == '') {
-            $errors = 'El email es requerido';
+            $errors[] = 'El email es requerido';
         }
         if( ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors =  'El correo electrónico no es válido';
+            $errors[] =  'El correo electrónico no es válido';
         }
 
         if (count($errors) == 0) {
             if ( ! $this->model->existsEmail($email)) {
-                $errors = 'El correo electrónico no existe en la base de datos';
+                $errors[] = 'El correo electrónico no existe en la base de datos';
             } else {
                 if ($this->model->sendEmail($email)) {
 
@@ -141,40 +141,40 @@ class LoginController extends Controller
         ];
 
         if ($firstName == '') {
-            $errors = 'El nombre es requerido';
+            $errors[] = 'El nombre es requerido';
         }
         if ($lastName1 == '') {
-            $errors = 'El primer apellido es requerido';
+            $errors[] = 'El primer apellido es requerido';
         }
         if ($lastName2 == '') {
-            $errors =  'El segundo apellido es requerido';
+            $errors[] =  'El segundo apellido es requerido';
         }
         if ($email == '') {
-            $errors = 'El email es requerido';
+            $errors[] = 'El email es requerido';
         }
         if ($password1 == '') {
-            $errors = 'La contraseña es requerido';
+            $errors[] = 'La contraseña es requerido';
         }
         if ($password2 == '') {
-            $errors =  'Repetir contraseña es requerido';
+            $errors[] =  'Repetir contraseña es requerido';
         }
         if ($address == '') {
-            $errors = 'La dirección es requerida';
+            $errors[] = 'La dirección es requerida';
         }
         if ($city == '') {
-            $errors = 'La ciudad es requerida';
+            $errors[] = 'La ciudad es requerida';
         }
         if ($state == '') {
-            $errors =  'La provincia es requerida';
+            $errors[] =  'La provincia es requerida';
         }
         if ($postcode == '') {
-            $errors =  'El código postal es requerido';
+            $errors[] =  'El código postal es requerido';
         }
         if ($country == '') {
-            $errors = 'El país es requerido';
+            $errors[] = 'El país es requerido';
         }
         if ($password1 != $password2) {
-            $errors = 'Las contraseñas deben ser iguales';
+            $errors[] = 'Las contraseñas deben ser iguales';
         }
 
         if (count($errors) == 0) {
@@ -240,16 +240,16 @@ class LoginController extends Controller
         $password2 = $_POST['password2'] ?? '';
 
         if ($id == '') {
-            $errors = 'El usuario no existe';
+            $errors[] = 'El usuario no existe';
         }
         if ($password1 == '') {
-            $errors = 'La contraseña es requerida';
+            $errors[] = 'La contraseña es requerida';
         }
         if ($password2 == '') {
-            $errors = 'Repetir contraseña es requerido';
+            $errors[] = 'Repetir contraseña es requerido';
         }
         if ($password1 != $password2) {
-            $errors = 'Ambas claves deben ser iguales';
+            $errors[] = 'Ambas claves deben ser iguales';
         }
 
         if (count($errors)) {
@@ -372,10 +372,8 @@ class LoginController extends Controller
         $this->view('register', $data);
     }
 
-    /**
-     * @param $id
-     * @return void
-     */
+
+
     public function showChangePasswordRegister($id): void
     {
         $data = [

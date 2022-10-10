@@ -48,19 +48,19 @@ class AdminUserController extends Controller
         ];
 
         if (empty($name)) {
-           $errors = 'El nombre de usuario es requerido';
+           $errors[] = 'El nombre de usuario es requerido';
         }
         if (empty($email)) {
-            $errors = 'El correo electrónico de usuario es requerido';
+            $errors[] = 'El correo electrónico de usuario es requerido';
         }
         if (empty($password1)) {
-            $errors ='La clave de acceso es requerida';
+            $errors[] ='La clave de acceso es requerida';
         }
         if (empty($password2)) {
-            $errors ='La verificación de clave es requerida';
+            $errors[] ='La verificación de clave es requerida';
         }
         if ($password1 != $password2) {
-            $errors = 'Las claves no coinciden';
+            $errors[] = 'Las claves no coinciden';
         }
 
         if ( ! $errors) {
