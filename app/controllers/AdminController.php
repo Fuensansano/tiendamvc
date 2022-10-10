@@ -50,7 +50,14 @@ class AdminController extends Controller
             return;
         }
 
-        $errors = $this->model->verifyUser($email, $password);
+        $admin = $this->model->findAdminByEmail($email);
+        if ( ! $admin ) {
+            $errors[] = 'El usuario no existe en nuestros registros';
+            $this->index($dataForm,$errors);
+            return;
+        }
+
+        $errors = $this->model->verifyUser($admin, $password);
 
         if ( ! $errors ) {
             $session = new Session();
