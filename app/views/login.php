@@ -33,7 +33,7 @@
     <div class="card-footer">
         <div class="row">
             <div class="col-sm-6">
-                <a href="<?= ROOT ?>login/registro" class="btn btn-info">Nuevo usuario</a>
+                <a href="<?= ROOT ?>login/register" class="btn btn-info">Nuevo usuario</a>
             </div>
             <div class="col-sm-6">
                 <a href="<?= ROOT ?>login/forgot" class="btn btn-info">Recordar Contraseña</a>
