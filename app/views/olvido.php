@@ -4,7 +4,7 @@
             <h1 class="text-center"><?= $data['subtitle'] ?></h1>
         </div>
         <div class="card-body">
-            <form action="<?= ROOT ?>login/olvido" method="post">
+            <form action="<?= ROOT ?>login/forgot" method="post">
                 <div class="form-group text-left">
                     <label for="email">Correo electrónico:</label>
                     <input type="email" name="email" class="form-control">

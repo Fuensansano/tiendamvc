@@ -32,84 +32,76 @@ class LoginController extends Controller
         $this->view('login', $data);
     }
 
-    public function olvido()
+    public function forgot()
     {
         $errors = [];
 
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 
+            $this->showForgotForm();
+            return;
+        }
+
+        $email = $_POST['email'] ?? '';
+
+        if ($email == '') {
+            $errors = 'El email es requerido';
+        }
+        if( ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors =  'El correo electrónico no es válido';
+        }
+
+        if (count($errors) == 0) {
+            if ( ! $this->model->existsEmail($email)) {
+                $errors = 'El correo electrónico no existe en la base de datos';
+            } else {
+                if ($this->model->sendEmail($email)) {
+
+                    $data = [
+                        'titulo' => 'Cambio de contraseña de acceso',
+                        'menu' => false,
+                        'errors' => [],
+                        'subtitle' => 'Cambio de contraseña de acceso',
+                        'text' => 'Se ha enviado un correo a <b>' . $email . '</b> para que pueda cambiar su clave de acceso. <br>No olvide revisar su carpeta de spam. <br>Cualquier duda que tenga puede comunicarse con nosotros.',
+                        'color' => 'alert-success',
+                        'url' => 'login',
+                        'colorButton' => 'btn-success',
+                        'textButton' => 'Regresar',
+                    ];
+
+                    $this->view('mensaje', $data);
+
+                } else {
+
+                    $data = [
+                        'titulo' => 'Error con correo',
+                        'menu' => false,
+                        'errors' => [],
+                        'subtitle' => 'Error en el envío del correo electrónico',
+                        'text' => 'Existió un problema al enviar el correo electrónico.<br>Por favor, pruebe más tarde o comuníquese con nuestro servicio de soporte',
+                        'color' => 'alert-danger',
+                        'url' => 'login',
+                        'colorButton' => 'btn-danger',
+                        'textButton' => 'Regresar',
+                    ];
+
+                    $this->view('mensaje', $data);
+
+                }
+            }
+        }
+
+        if (count($errors) > 0) {
             $data = [
                 'titulo' => 'Olvido de la contraseña',
                 'menu' => false,
-                'errors' => [],
+                'errors' => $errors,
                 'subtitle' => '¿Olvidaste la contraseña?'
             ];
 
             $this->view('olvido', $data);
-
-        } else {
-
-            $email = $_POST['email'] ?? '';
-
-            if ($email == '') {
-                array_push($errors, 'El email es requerido');
-            }
-            if( ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                array_push($errors, 'El correo electrónico no es válido');
-            }
-
-            if (count($errors) == 0) {
-                if ( ! $this->model->existsEmail($email)) {
-                    array_push($errors, 'El correo electrónico no existe en la base de datos');
-                } else {
-                    if ($this->model->sendEmail($email)) {
-
-                        $data = [
-                            'titulo' => 'Cambio de contraseña de acceso',
-                            'menu' => false,
-                            'errors' => [],
-                            'subtitle' => 'Cambio de contraseña de acceso',
-                            'text' => 'Se ha enviado un correo a <b>' . $email . '</b> para que pueda cambiar su clave de acceso. <br>No olvide revisar su carpeta de spam. <br>Cualquier duda que tenga puede comunicarse con nosotros.',
-                            'color' => 'alert-success',
-                            'url' => 'login',
-                            'colorButton' => 'btn-success',
-                            'textButton' => 'Regresar',
-                        ];
-
-                        $this->view('mensaje', $data);
-
-                    } else {
-
-                        $data = [
-                            'titulo' => 'Error con correo',
-                            'menu' => false,
-                            'errors' => [],
-                            'subtitle' => 'Error en el envío del correo electrónico',
-                            'text' => 'Existió un problema al enviar el correo electrónico.<br>Por favor, pruebe más tarde o comuníquese con nuestro servicio de soporte',
-                            'color' => 'alert-danger',
-                            'url' => 'login',
-                            'colorButton' => 'btn-danger',
-                            'textButton' => 'Regresar',
-                        ];
-
-                        $this->view('mensaje', $data);
-
-                    }
-                }
-            }
-
-            if (count($errors) > 0) {
-                $data = [
-                    'titulo' => 'Olvido de la contraseña',
-                    'menu' => false,
-                    'errors' => $errors,
-                    'subtitle' => '¿Olvidaste la contraseña?'
-                ];
-
-                $this->view('olvido', $data);
-            }
-
         }
+
     }
 
     public function registro()
@@ -145,40 +137,40 @@ class LoginController extends Controller
             ];
 
             if ($firstName == '') {
-                array_push($errors, 'El nombre es requerido');
+                $errors = 'El nombre es requerido';
             }
             if ($lastName1 == '') {
-                array_push($errors, 'El primer apellido es requerido');
+                $errors = 'El primer apellido es requerido';
             }
             if ($lastName2 == '') {
-                array_push($errors, 'El segundo apellido es requerido');
+                $errors =  'El segundo apellido es requerido';
             }
             if ($email == '') {
-                array_push($errors, 'El email es requerido');
+                $errors = 'El email es requerido';
             }
             if ($password1 == '') {
-                array_push($errors, 'La contraseña es requerido');
+                $errors = 'La contraseña es requerido';
             }
             if ($password2 == '') {
-                array_push($errors, 'Repetir contraseña es requerido');
+                $errors =  'Repetir contraseña es requerido';
             }
             if ($address == '') {
-                array_push($errors, 'La dirección es requerida');
+                $errors = 'La dirección es requerida';
             }
             if ($city == '') {
-                array_push($errors, 'La ciudad es requerida');
+                $errors = 'La ciudad es requerida';
             }
             if ($state == '') {
-                array_push($errors, 'La provincia es requerida');
+                $errors =  'La provincia es requerida';
             }
             if ($postcode == '') {
-                array_push($errors, 'El código postal es requerido');
+                $errors =  'El código postal es requerido';
             }
             if ($country == '') {
-                array_push($errors, 'El país es requerido');
+                $errors = 'El país es requerido';
             }
             if ($password1 != $password2) {
-                array_push($errors, 'Las contraseñas deben ser iguales');
+                $errors = 'Las contraseñas deben ser iguales';
             }
 
             if (count($errors) == 0) {
@@ -227,6 +219,7 @@ class LoginController extends Controller
 
                 $this->view('register', $data);
             }
+
         } else {
             // Mostramos el formulario
             $data = [
@@ -368,5 +361,18 @@ class LoginController extends Controller
         }
 
 
+    }
+
+
+    public function showForgotForm(): void
+    {
+        $data = [
+            'titulo' => 'Olvido de la contraseña',
+            'menu' => false,
+            'errors' => [],
+            'subtitle' => '¿Olvidaste la contraseña?'
+        ];
+
+        $this->view('olvido', $data);
     }
 }
