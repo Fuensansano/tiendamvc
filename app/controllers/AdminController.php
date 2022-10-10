@@ -57,15 +57,22 @@ class AdminController extends Controller
             return;
         }
 
-        $errors = $this->model->verifyUser($admin, $password);
+        $errors = $this->model->verifyAdminPassword($admin, $password);
 
-        if ( ! $errors ) {
-            $session = new Session();
-            $session->login($dataForm);
-            header("LOCATION:" . ROOT . 'AdminShop');
+        if ($errors) {
+            $this->index($dataForm,$errors);
+            return;
         }
 
-        $this->index($dataForm,$errors);
+        $session = new Session();
+        $session->login($dataForm);
 
+        $errors = $this->model->updateLastLogin($admin);
+        if ($errors) {
+            $this->index($dataForm,$errors);
+            return;
+        }
+
+        header("LOCATION:" . ROOT . 'AdminShop');
     }
 }

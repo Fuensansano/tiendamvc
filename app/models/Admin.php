@@ -9,7 +9,7 @@ class Admin
         $this->db = Mysqldb::getInstance()->getDatabase();
     }
 
-    public function verifyUser($admin,$password)
+    public function verifyAdminPassword($admin,$password)
     {
         $errors = [];
 
@@ -17,9 +17,8 @@ class Admin
 
         if ($password != $admin->password) {
             $errors[] = 'La clave de acceso no es correcta';
-        } else {
-            $errors = $this->updateLastLogin($admin, $errors);
         }
+
         return $errors;
     }
 
@@ -34,8 +33,9 @@ class Admin
     }
 
 
-    public function updateLastLogin($admin, $errors): array
+    public function updateLastLogin($admin): array
     {
+        $errors = [];
         $sql2 = 'UPDATE admins SET login_at=:login WHERE id=:id';
         $query2 = $this->db->prepare($sql2);
         $params = [
