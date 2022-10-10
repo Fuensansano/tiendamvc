@@ -37,6 +37,7 @@ class AdminController extends Controller
             'user' => $user,
             'password' => $password,
         ];
+
         if(empty($user)) {
             $errors[] = 'El usuario es requerido';
         }
@@ -46,7 +47,7 @@ class AdminController extends Controller
 
         // TODO: intentar simplificar comprobación de errores
         if ( ! $errors ) {
-            $errors = $this->model->verifyUser($dataForm);
+            $errors = $this->model->verifyUser($user, $password);
 
             if ( ! $errors ) {
                 $session = new Session();

@@ -9,13 +9,13 @@ class Admin
         $this->db = Mysqldb::getInstance()->getDatabase();
     }
 
-    public function verifyUser($data)
+    public function verifyUser($email,$password)
     {
         $errors = [];
 
-        $password = hash_hmac('sha512', $data['password'], ENCRIPTKEY);
+        $password = hash_hmac('sha512', $password, ENCRIPTKEY);
 
-        $admins = $this->findUserByEmail($data);
+        $admins = $this->findUserByEmail($email);
 
         if ( ! $admins ) {
             $errors[] = 'El usuario no existe en nuestros registros';
@@ -31,11 +31,11 @@ class Admin
     }
 
 
-    public function findUserByEmail($data): array|false
+    public function findUserByEmail($email): array|false
     {
         $sql = 'SELECT * FROM admins WHERE email=:email';
         $query = $this->db->prepare($sql);
-        $query->bindParam(':email', $data['user'], PDO::PARAM_STR);
+        $query->bindParam(':email',$email,PDO::PARAM_STR);
         $query->execute();
         $admins = $query->fetchAll(PDO::FETCH_OBJ);
         return $admins;
