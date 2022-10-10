@@ -4,7 +4,7 @@
         <h1 class="text-center">Login</h1>
     </div>
     <div class="card-body">
-        <form action="<?= ROOT ?>login/verifyUser/" method="POST">
+        <form action="<?= ROOT ?>login/loginClientInShop/" method="POST">
             <div class="form-group text-left">
                 <label for="user">Usuario:</label>
                 <input type="text" name="user" class="form-control"

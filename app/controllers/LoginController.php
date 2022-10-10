@@ -302,7 +302,7 @@ class LoginController extends Controller
     }
 
 
-    public function verifyUser()
+    public function loginClientInShop()
     {
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
             $this->index();
