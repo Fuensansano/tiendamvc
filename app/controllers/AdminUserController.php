@@ -35,14 +35,7 @@ class AdminUserController extends Controller
     {
 
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-            $data = [
-                'titulo' => 'Administración de Usuarios - Alta',
-                'menu' => false,
-                'admin' => true,
-                'data' => [],
-            ];
-
-            $this->view('admin/users/create', $data);
+            $this->showCreateAdminUserForm();
             return;
         }
 
@@ -60,19 +53,19 @@ class AdminUserController extends Controller
         ];
 
         if (empty($name)) {
-            array_push($errors, 'El nombre de usuario es requerido');
+           $errors = 'El nombre de usuario es requerido';
         }
         if (empty($email)) {
-            array_push($errors, 'El correo electrónico de usuario es requerido');
+            $errors = 'El correo electrónico de usuario es requerido';
         }
         if (empty($password1)) {
-            array_push($errors, 'La clave de acceso es requerida');
+            $errors ='La clave de acceso es requerida';
         }
         if (empty($password2)) {
-            array_push($errors, 'La verificación de clave es requerida');
+            $errors ='La verificación de clave es requerida';
         }
         if ($password1 != $password2) {
-            array_push($errors, 'Las claves no coinciden');
+            $errors = 'Las claves no coinciden';
         }
 
         if ( ! $errors) {
@@ -137,5 +130,20 @@ class AdminUserController extends Controller
     public function delete()
     {
         print 'Eliminación de usuarios';
+    }
+
+    /**
+     * @return void
+     */
+    public function showCreateAdminUserForm(): void
+    {
+        $data = [
+            'titulo' => 'Administración de Usuarios - Alta',
+            'menu' => false,
+            'admin' => true,
+            'data' => [],
+        ];
+
+        $this->view('admin/users/create', $data);
     }
 }

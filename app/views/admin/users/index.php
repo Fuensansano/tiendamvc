@@ -32,7 +32,7 @@
         <div class="card-footer">
             <div class="row">
                 <div class="col-sm-6">
-                    <a href="<?= ROOT ?>adminUser/create" class="btn btn-success">
+                    <a href="<?= ROOT ?>adminUser/showCreateAdminUserForm" class="btn btn-success">
                         Crear Usuario
                     </a>
                 </div>
