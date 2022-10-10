@@ -23,8 +23,6 @@ class AdminController extends Controller
 
     public function loginAdminInShop()
     {
-        $errors = [];
-        $dataForm = [];
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
             $this->index();
             return;
@@ -38,6 +36,7 @@ class AdminController extends Controller
             'password' => $password,
         ];
 
+        $errors = [];
         if(empty($email)) {
             $errors[] = 'El usuario es requerido';
         }
