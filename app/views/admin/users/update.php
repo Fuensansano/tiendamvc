@@ -20,7 +20,7 @@
                     >
                 </div>
                 <div class="form-group text-left">
-                    <label for="password1">Clave de acceso:</label>
+                    <label for="password1">Clave de acceso: (dejar en blanco si no desea modificarla)</label>
                     <input type="password" name="password1" class="form-control"
                            placeholder="Escribe tu contraseña" required>
                 </div>
@@ -34,7 +34,7 @@
                     <select name="status" id="status" class="form-control">
                         <option value="">Selecciona el estado del usuario</option>
                         <?php foreach($data['status'] as $status): ?>
-                            <option value="<?= $status->value ?>"><?= $status->description ?></option>
+                            <option value="<?= $status->value ?>" <?= $status->value == $data['data']->status ? ' selected' : '' ?> ><?= $status->description ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

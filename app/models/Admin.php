@@ -17,6 +17,10 @@ class Admin
 
         if ($password != $admin->password) {
             $errors[] = 'La clave de acceso no es correcta';
+        }elseif ($admin->status == 0) {
+            array_push($errors, 'El usuario está desactivado');
+        } elseif ($admin->deleted == 1) {
+            array_push($errors, 'El usuario no existe en nuestros registros');
         }
 
         return $errors;

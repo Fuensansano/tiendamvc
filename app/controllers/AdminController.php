@@ -55,6 +55,7 @@ class AdminController extends Controller
             $this->index($dataForm,$errors);
             return;
         }
+        
 
         $errors = $this->model->verifyAdminPassword($admin, $password);
 
