@@ -63,29 +63,8 @@ class AdminUserController extends Controller
             $errors[] = 'Las claves no coinciden';
         }
 
-        if ( ! $errors) {
 
-            if ($this->model->createAdminUser($dataForm)) {
-                header("location:" . ROOT . 'adminUser');
-            } else {
-
-                $data = [
-                    'titulo' => 'Error en la creación de un usuario administrador',
-                    'menu' => false,
-                    'errors' => [],
-                    'subtitle' => 'Error al crear un nuevo usuario administrador',
-                    'text' => 'Se ha producido un error durante el proceso de creación de un usuario administrador',
-                    'color' => 'alert-danger',
-                    'url' => 'adminUser',
-                    'colorButton' => 'btn-danger',
-                    'textButton' => 'Volver',
-                ];
-                $this->view('mensaje', $data);
-
-            }
-
-        } else {
-
+        if ($errors) {
             $data = [
                 'titulo' => 'Administración de Usuarios - Alta',
                 'menu' => false,
@@ -95,9 +74,30 @@ class AdminUserController extends Controller
             ];
 
             $this->view('admin/users/create', $data);
+            return;
+        }
+
+        if (! $errors) {
+            if ($this->model->createAdminUser($dataForm)) {
+                header("location:" . ROOT . 'adminUser');
+                return;
+            }
+            $data = [
+                'titulo' => 'Error en la creación de un usuario administrador',
+                'menu' => false,
+                'errors' => [],
+                'subtitle' => 'Error al crear un nuevo usuario administrador',
+                'text' => 'Se ha producido un error durante el proceso de creación de un usuario administrador',
+                'color' => 'alert-danger',
+                'url' => 'adminUser',
+                'colorButton' => 'btn-danger',
+                'textButton' => 'Volver',
+            ];
+            $this->view('mensaje', $data);
 
         }
     }
+
 
 
     public function update($id)

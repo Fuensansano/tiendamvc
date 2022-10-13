@@ -24,7 +24,7 @@
                             >Editar</a>
                         </td>
                         <td class="text-center">
-                            <a href="<?= ROOT ?>adminuser/delete/<?= $user->id ?>"
+                            <a href="<?= ROOT ?>adminUser/delete/<?= $user->id ?>"
                                class="btn btn-danger"
                             >Borrar</a>
                         </td>
