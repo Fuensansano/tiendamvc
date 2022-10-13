@@ -177,52 +177,49 @@ class LoginController extends Controller
             $errors[] = 'Las contraseñas deben ser iguales';
         }
 
-        if (count($errors) == 0) {
 
-            if ($this->model->createUser($dataForm)) {
-
-                $data = [
-                    'titulo' => 'Bienvenido',
-                    'menu' => false,
-                    'errors' => [],
-                    'subtitle' => 'Bienvenido/a a nuestra tienda online',
-                    'text' => 'Gracias por su registro',
-                    'color' => 'alert-success',
-                    'url' => 'menu',
-                    'colorButton' => 'btn-success',
-                    'textButton' => 'Acceder',
-                ];
-
-                $this->view('mensaje', $data);
-
-            } else {
-
-                $data = [
-                    'titulo' => 'Error',
-                    'menu' => false,
-                    'errors' => [],
-                    'subtitle' => 'Error en el proceso de registro.',
-                    'text' => 'Probablemente el correo utilizado ya exista. Pruebe con otro',
-                    'color' => 'alert-danger',
-                    'url' => 'login',
-                    'colorButton' => 'btn-danger',
-                    'textButton' => 'Regresar',
-                ];
-
-                $this->view('mensaje', $data);
-
-            }
-
-        } else {
+        if ($errors) {
             $data = [
                 'titulo' => 'Registro',
-                'menu'   => false,
+                'menu' => false,
                 'errors' => $errors,
                 'dataForm' => $dataForm
             ];
 
             $this->view('register', $data);
+            return;
         }
+
+        if (!$this->model->createUser($dataForm)) {
+            $data = [
+                'titulo' => 'Error',
+                'menu' => false,
+                'errors' => [],
+                'subtitle' => 'Error en el proceso de registro.',
+                'text' => 'Probablemente el correo utilizado ya exista. Pruebe con otro',
+                'color' => 'alert-danger',
+                'url' => 'login',
+                'colorButton' => 'btn-danger',
+                'textButton' => 'Regresar',
+            ];
+
+            $this->view('mensaje', $data);
+            return;
+        }
+
+        $data = [
+            'titulo' => 'Bienvenido',
+            'menu' => false,
+            'errors' => [],
+            'subtitle' => 'Bienvenido/a a nuestra tienda online',
+            'text' => 'Gracias por su registro',
+            'color' => 'alert-success',
+            'url' => 'menu',
+            'colorButton' => 'btn-success',
+            'textButton' => 'Acceder',
+        ];
+
+        $this->view('mensaje', $data);
     }
 
 
