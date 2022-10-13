@@ -13,24 +13,22 @@ class AdminProductController extends Controller
     {
         $session = new Session();
 
-        if ($session->getLogin()) {
+        $session->redirectIfNotLogin( ROOT . 'admin');
 
-            $products = $this->model->getProducts();
-            $type = $this->model->getConfig('productType');
+        $products = $this->model->getProducts();
+        $type = $this->model->getConfig('productType');
 
-            $data = [
-                'titulo' => 'Administración de Productos',
-                'menu' => false,
-                'admin' => true,
-                'type' => $type,
-                'products' => $products,
-            ];
+        $data = [
+            'titulo' => 'Administración de Productos',
+            'menu' => false,
+            'admin' => true,
+            'type' => $type,
+            'products' => $products,
+        ];
 
-            $this->view('admin/products/index', $data);
+        $this->view('admin/products/index', $data);
 
-        } else {
-            header('location:' . ROOT . 'admin');
-        }
+
     }
 
     public function create()
