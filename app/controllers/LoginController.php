@@ -263,44 +263,40 @@ class LoginController extends Controller
             ];
 
             $this->view('changepassword', $data);
-
-        } else {
-
-            if ($this->model->changePassword($id, $password1)) {
-
-                $data = [
-                    'titulo' => 'Cambiar contraseña',
-                    'menu'   => false,
-                    'errors' => [],
-                    'subtitle' => 'Modificación de la contraseña de acceso',
-                    'text' => 'La contraseña ha sido cambiada correctamente. Bienvenido de nuevo',
-                    'color' => 'alert-success',
-                    'url' => 'login',
-                    'colorButton' => 'btn-success',
-                    'textButton' => 'Regresar',
-                ];
-
-                $this->view('mensaje', $data);
-
-            } else {
-
-                $data = [
-                    'titulo' => 'Error al cambiar contraseña',
-                    'menu'   => false,
-                    'errors' => [],
-                    'subtitle' => 'Error al modificar la contraseña de acceso',
-                    'text' => 'Existió un error al modificar la clave de acceso',
-                    'color' => 'alert-danger',
-                    'url' => 'login',
-                    'colorButton' => 'btn-danger',
-                    'textButton' => 'Regresar',
-                ];
-
-                $this->view('mensaje', $data);
-            }
+            return;
         }
-    }
 
+        if (!$this->model->changePassword($id, $password1)) {
+            $data = [
+                'titulo' => 'Error al cambiar contraseña',
+                'menu'   => false,
+                'errors' => [],
+                'subtitle' => 'Error al modificar la contraseña de acceso',
+                'text' => 'Existió un error al modificar la clave de acceso',
+                'color' => 'alert-danger',
+                'url' => 'login',
+                'colorButton' => 'btn-danger',
+                'textButton' => 'Regresar',
+            ];
+
+            $this->view('mensaje', $data);
+            return;
+        }
+
+        $data = [
+            'titulo' => 'Cambiar contraseña',
+            'menu'   => false,
+            'errors' => [],
+            'subtitle' => 'Modificación de la contraseña de acceso',
+            'text' => 'La contraseña ha sido cambiada correctamente. Bienvenido de nuevo',
+            'color' => 'alert-success',
+            'url' => 'login',
+            'colorButton' => 'btn-success',
+            'textButton' => 'Regresar',
+        ];
+
+        $this->view('mensaje', $data);
+    }
 
     public function loginClientInShop()
     {

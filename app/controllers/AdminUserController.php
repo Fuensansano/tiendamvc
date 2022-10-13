@@ -77,27 +77,24 @@ class AdminUserController extends Controller
             return;
         }
 
-        if (! $errors) {
-            if ($this->model->createAdminUser($dataForm)) {
-                header("location:" . ROOT . 'adminUser');
-                return;
-            }
-            $data = [
-                'titulo' => 'Error en la creación de un usuario administrador',
-                'menu' => false,
-                'errors' => [],
-                'subtitle' => 'Error al crear un nuevo usuario administrador',
-                'text' => 'Se ha producido un error durante el proceso de creación de un usuario administrador',
-                'color' => 'alert-danger',
-                'url' => 'adminUser',
-                'colorButton' => 'btn-danger',
-                'textButton' => 'Volver',
-            ];
-            $this->view('mensaje', $data);
 
+        if ($this->model->createAdminUser($dataForm)) {
+            header("location:" . ROOT . 'adminUser');
+            return;
         }
+        $data = [
+            'titulo' => 'Error en la creación de un usuario administrador',
+            'menu' => false,
+            'errors' => [],
+            'subtitle' => 'Error al crear un nuevo usuario administrador',
+            'text' => 'Se ha producido un error durante el proceso de creación de un usuario administrador',
+            'color' => 'alert-danger',
+            'url' => 'adminUser',
+            'colorButton' => 'btn-danger',
+            'textButton' => 'Volver',
+        ];
+        $this->view('mensaje', $data);
     }
-
 
 
     public function update($id)
@@ -195,6 +192,7 @@ class AdminUserController extends Controller
 
         $this->view('admin/users/delete', $data);
     }
+
 
     public function showCreateAdminUserForm(): void
     {
