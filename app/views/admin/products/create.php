@@ -1,14 +1,16 @@
 <?php include_once(VIEWS . 'header.php')?>
+<script src="https://cdn.ckeditor.com/ckeditor5/35.2.0/classic/ckeditor.js"></script>
+<script src="<?= ROOT . 'js/adminCreateProduct.js' ?>"></script>
+
 <div class="card p-4 bg-light">
     <div class="card-header">
         <h1 class="text-center">Alta de un producto</h1>
     </div>
     <div class="card-body">
-        <form action="<?= ROOT ?>adminProduct/create/" method="POST">
+        <form id="createProductForm" action="<?= ROOT ?>adminProduct/viewCreateForm" method="POST" enctype="multipart/form-data">
             <div class="form-group">
-                <label for="status">Tipo de producto</label>
-                <select name="status" id="status" class="form-control">
-                    <option value="">Selecciona el tipo de producto</option>
+                <label for="type">Tipo de producto</label>
+                <select name="type" id="type" class="form-control">
                     <?php foreach($data['type'] as $type): ?>
                         <option value="<?= $type->value ?>"><?= $type->description ?></option>
                     <?php endforeach; ?>
@@ -18,8 +20,7 @@
                 <label for="name">Nombre:</label>
                 <input type="text" name="name" class="form-control"
                        placeholder="Escribe el nombre del producto" required
-                       value="<?= $data['data']['name'] ?? '' ?>"
-                >
+                       value="<?= $data['data']['name'] ?? '' ?>">
             </div>
             <div class="form-group text-left">
                 <label for="description">Descripción:</label>
@@ -135,7 +136,6 @@
             <div class="form-group text-left">
                 <label for="status">Estado del producto:</label>
                 <select class="form-control" name="status" id="status">
-                    <option value="">Selecciona el estado del producto</option>
                     <?php foreach ($data['status'] as $status) : ?>
                         <option value="<?= $status->value ?>"
                             <?= (isset($data['data']['status']) && $data['data']['status']==$status->value) ? ' selected ' : '' ?>
@@ -164,7 +164,13 @@
         </form>
     </div>
     <div class="card-footer">
-
     </div>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .catch( error => {
+                console.error(error)
+            })
+    </script>
 </div>
 <?php include_once(VIEWS . 'footer.php')?>
