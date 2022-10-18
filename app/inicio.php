@@ -11,7 +11,10 @@ define('ENCRIPTKEY', 'elperrodesanroque');
 
 // Carga las clases iniciales
 require_once('libs/Mysqldb.php');
+require_once('libs/MySQL.php');
+require_once('libs/MysqlReturnTypes.php');
 require_once('libs/Controller.php');
 require_once('libs/Application.php');
 require_once ('libs/Session.php');
 require_once('libs/Validate.php');
+require_once('domain/index.php');

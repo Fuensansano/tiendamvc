@@ -80,9 +80,22 @@ class AdminProductController extends Controller
             $necesites = addslashes(htmlentities($_POST['necesites'] ?? ''));
 
             // Validamos la información
+            $errors = Course::validateName($name,$errors);
+            $errors = Course::validateDescription($description,$errors);
+            $errors = Course::validatePrice($price,$errors);
+            $errors = Course::validateDiscount($discount,$errors);
+            $errors = Course::validateSendPrice($send,$errors);
+            $errors = Course::validateSendPrice($send,$errors);
+            $errors = Course::validateDiscountLowerThanPrice($discount,$price,$errors);
+            $errors = Course::validatePublishedDate($published,$errors);
+
+
+            /*
+
             if (empty($name)) {
                 $errors[] = 'El nombre del producto es requerido';
             }
+
             if (empty($description)) {
                 $errors[] = 'La descripción del producto es requerida';
             }
@@ -98,11 +111,15 @@ class AdminProductController extends Controller
             if (is_numeric($price) && is_numeric($discount) && $price < $discount) {
                 $errors[] = 'El descuento no puede ser mayor que el precio';
             }
-            if ( ! Validate::date($published) ) {
+
+            if ($published === '') {
+                $errors[] = 'La fecha está vacia';
+            } elseif ( ! Validate::date($published) ) {
                 $errors[] = 'La fecha o su formato no es correcto';
             } elseif ( ! Validate::dateDif($published)) {
                 $errors[] = 'La fecha de publicación no puede ser anterior a hoy';
             }
+            */
 
             if (empty($people)) {
                 $errors[] = 'El público objetivo del curso es obligatorio';
@@ -159,9 +176,9 @@ class AdminProductController extends Controller
             $type = $_POST['type'] ?? '';
             $name = addslashes(htmlentities($_POST['name'] ?? ''));
             $description = addslashes(htmlentities($_POST['description'] ?? ''));
-            $price = Validate::number(intval($_POST['price']) ?? '');
-            $discount = Validate::number(intval($_POST['discount']) ?? '');
-            $send = Validate::number(intval($_POST['send']) ?? '');
+            $price = Validate::number((float)($_POST['price'] ?? ''));
+            $discount = Validate::number((float)($_POST['discount'] ?? ''));
+            $send = Validate::number((float)($_POST['send'] ?? ''));
             $image = Validate::file($_FILES['image']['name']);
             $published = $_POST['published'] ?? '';
             $relation1 = $_POST['relation1'] != '' ? $_POST['relation1'] : 0;
@@ -177,6 +194,15 @@ class AdminProductController extends Controller
             $pages = Validate::number(intval($_POST['pages']) ?? '');
 
             // Validamos la información
+            $errors = Book::validateName($name,$errors);
+            $errors = Book::validateDescription($description,$errors);
+            $errors = Book::validatePrice($price,$errors);
+            $errors = Book::validateDiscount($discount,$errors);
+            $errors = Book::validateSendPrice($send,$errors);
+            $errors = Book::validateSendPrice($send,$errors);
+            $errors = Book::validateDiscountLowerThanPrice($discount,$price,$errors);
+            $errors = Book::validatePublishedDate($published,$errors);
+            /*
             if (empty($name)) {
                 $errors[] = 'El nombre del producto es requerido';
             }
@@ -195,11 +221,15 @@ class AdminProductController extends Controller
             if (is_numeric($price) && is_numeric($discount) && $price < $discount) {
                 $errors[] = 'El descuento no puede ser mayor que el precio';
             }
-            if (!Validate::date($published) ) {
+
+            if ($published === '') {
+                $errors[] = 'La fecha está vacia';
+            }elseif (!Validate::date($published) ) {
                 $errors[] = 'La fecha o su formato no es correcto';
             } elseif ( ! Validate::dateDif($published)) {
                 $errors[] = 'La fecha de publicación no puede ser anterior a hoy';
             }
+            */
 
             if (empty($author)) {
                 $errors[] = 'El autor del libro es necesario';
@@ -231,7 +261,7 @@ class AdminProductController extends Controller
             ];
 
 
-            var_dump($dataForm);
+
             if (!$errors) {
 
                 // Enviamos la información al modelo

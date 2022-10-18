@@ -52,4 +52,18 @@ class Mysqldb
     {
         return $this->db;
     }
+
+    public static function query($sql, $params, $typeOfReturn = MysqlReturnTypes::ALL)
+    {
+        $connection = self::getInstance()->getDatabase();
+        $query = $connection->prepare($sql);
+        $query->execute($params);
+
+        return match ($typeOfReturn) {
+            MysqlReturnTypes::ALL => $query->fetchAll(PDO::FETCH_OBJ),
+            MysqlReturnTypes::ONE =>  $query->fetch(PDO::FETCH_OBJ),
+            MysqlReturnTypes::BOOLEAN => $query->fetch(PDO::FETCH_OBJ) !== 0,
+            MysqlReturnTypes::COUNT => $query->rowCount(),
+        };
+    }
 }

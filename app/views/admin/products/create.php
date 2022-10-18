@@ -12,7 +12,8 @@
                 <label for="type">Tipo de producto</label>
                 <select name="type" id="type" class="form-control">
                     <?php foreach($data['type'] as $type): ?>
-                        <option value="<?= $type->value ?>"><?= $type->description ?></option>
+                        <option value="<?= $type->value ?>"><?= $type->description ?> //hacer aquí recuerdo</option>
+
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -79,8 +80,8 @@
                        value="<?= (isset($data['data']['discount'])) ?? '' ?>">
             </div>
             <div class="form-group text-left">
-                <label for="envio">Coste del envío del producto:</label>
-                <input type="text" name="envio" class="form-control" pattern="^(\d|-)?(\d|,)*\.?\d*$"
+                <label for="send">Coste del envío del producto:</label>
+                <input type="text" name="send" class="form-control" pattern="^(\d|-)?(\d|,)*\.?\d*$"
                        placeholder="Escribe el costo del envio del producto sin comas ni símbolos."
                        value="<?= (isset($data['data']['send'])) ?? '' ?>">
             </div>
