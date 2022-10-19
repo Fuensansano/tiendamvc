@@ -90,6 +90,7 @@ class AdminProductController extends Controller
             $errors = Course::validatePublishedDate($published,$errors);
             $errors = Course::validatePeople($people, $errors);
             $errors = Course::validateObjetives($objetives, $errors);
+            $errors = Course::validateNecesites($necesites, $errors);
 
 
             /*
@@ -129,10 +130,11 @@ class AdminProductController extends Controller
             if (empty($objetives)) {
                 $errors[] = 'Los objetivos del curso son necesarios';
             }
-            */
+
             if (empty($necesites)) {
                 $errors[] = 'Los requisitos del curso son necesarios';
             }
+            */
 
 
             // Creamos el array de datos

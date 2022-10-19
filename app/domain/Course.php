@@ -36,4 +36,22 @@ class Course implements Validations
         }
         return $errors;
     }
+
+    public static function validateNecesites($necesites,$errors)
+    {
+        if (empty($necesites)) {
+            $errors[] = 'Las necesidades del curso son obligatorio';
+        }
+
+        if (strlen($necesites) < self::MIN_LENGTH_NAME) {
+            $errors[] = 'Las necesidades no pueden contener menos de ' .
+                self::MIN_LENGTH_NAME .' caracteres';
+        }
+        if (is_numeric($necesites)) {
+            $errors[] = 'Las necesidades no pueden ser un número';
+        }
+
+        return $errors;
+    }
+
 }
