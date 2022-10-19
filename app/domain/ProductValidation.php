@@ -1,11 +1,8 @@
 <?php
 
-define('MIN_LENGTH_NAME',3);
-define('MIN_VALUE_PRICE', 0);
 //$errors = [];
 trait ProductValidation
 {
-
     public static function validateName($name, $errors)
     {
         if (empty($name)) {

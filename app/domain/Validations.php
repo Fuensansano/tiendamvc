@@ -2,6 +2,7 @@
 
 interface Validations
 {
+    const MIN_LENGTH_NAME = 3;
     public static function validateName($name, $errors);
     public static function validateDescription($description, $errors);
     public static function validatePrice($price, $errors);

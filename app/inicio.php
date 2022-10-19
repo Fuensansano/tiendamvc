@@ -8,6 +8,8 @@ define('APP', ROOT . 'app' . DIRECTORY_SEPARATOR);
 define('URL', '/var/www/tiendamvc/');
 define('VIEWS', URL . APP . 'views/');
 define('ENCRIPTKEY', 'elperrodesanroque');
+define('MIN_LENGTH_NAME',3);
+define('MIN_VALUE_PRICE', 0);
 
 // Carga las clases iniciales
 require_once('libs/Mysqldb.php');

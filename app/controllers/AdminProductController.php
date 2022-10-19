@@ -191,7 +191,7 @@ class AdminProductController extends Controller
             //Books
             $author = addslashes(htmlentities($_POST['author'] ?? ''));
             $publisher = addslashes(htmlentities($_POST['publisher'] ?? ''));
-            $pages = Validate::number(intval($_POST['pages']) ?? '');
+            $pages = Validate::number($_POST['pages'] ?? '');
 
             // Validamos la información
             $errors = Book::validateName($name,$errors);
@@ -202,45 +202,10 @@ class AdminProductController extends Controller
             $errors = Book::validateSendPrice($send,$errors);
             $errors = Book::validateDiscountLowerThanPrice($discount,$price,$errors);
             $errors = Book::validatePublishedDate($published,$errors);
-            /*
-            if (empty($name)) {
-                $errors[] = 'El nombre del producto es requerido';
-            }
-            if (empty($description)) {
-                $errors[] = 'La descripción del producto es requerida';
-            }
-            if (!is_numeric($price)) {
-                $errors[] = 'El precio del producto debe de ser un número';
-            }
-            if (!is_numeric($discount)) {
-                $errors[] = 'El descuento del producto debe de ser un número';
-            }
-            if (!is_numeric($send)) {
-                $errors[] = 'Los gastos de envío del producto deben de ser numéricos';
-            }
-            if (is_numeric($price) && is_numeric($discount) && $price < $discount) {
-                $errors[] = 'El descuento no puede ser mayor que el precio';
-            }
+            $errors = Book::validateAuthor($author,$errors);
+            $errors = Book::validatePublisher($publisher,$errors);
+            $errors = Book::validatePages($pages,$errors);
 
-            if ($published === '') {
-                $errors[] = 'La fecha está vacia';
-            }elseif (!Validate::date($published) ) {
-                $errors[] = 'La fecha o su formato no es correcto';
-            } elseif ( ! Validate::dateDif($published)) {
-                $errors[] = 'La fecha de publicación no puede ser anterior a hoy';
-            }
-            */
-
-            if (empty($author)) {
-                $errors[] = 'El autor del libro es necesario';
-            }
-            if (empty($publisher)) {
-                $errors[] = 'La editorial del libro es necesaria';
-            }
-            if (!is_numeric($pages)) {
-                $pages = 0;
-                $errors[] = 'La cantidad de páginas de un libro debe de ser un número';
-            }
 
             // Creamos el array de datos
             $dataForm = [
