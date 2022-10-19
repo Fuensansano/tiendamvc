@@ -88,6 +88,7 @@ class AdminProductController extends Controller
             $errors = Course::validateSendPrice($send,$errors);
             $errors = Course::validateDiscountLowerThanPrice($discount,$price,$errors);
             $errors = Course::validatePublishedDate($published,$errors);
+            $errors = Course::validatePeople($people, $errors);
 
 
             /*
@@ -119,11 +120,11 @@ class AdminProductController extends Controller
             } elseif ( ! Validate::dateDif($published)) {
                 $errors[] = 'La fecha de publicación no puede ser anterior a hoy';
             }
-            */
 
             if (empty($people)) {
                 $errors[] = 'El público objetivo del curso es obligatorio';
             }
+            */
             if (empty($objetives)) {
                 $errors[] = 'Los objetivos del curso son necesarios';
             }
