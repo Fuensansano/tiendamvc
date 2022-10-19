@@ -89,6 +89,7 @@ class AdminProductController extends Controller
             $errors = Course::validateDiscountLowerThanPrice($discount,$price,$errors);
             $errors = Course::validatePublishedDate($published,$errors);
             $errors = Course::validatePeople($people, $errors);
+            $errors = Course::validateObjetives($objetives, $errors);
 
 
             /*
@@ -124,10 +125,11 @@ class AdminProductController extends Controller
             if (empty($people)) {
                 $errors[] = 'El público objetivo del curso es obligatorio';
             }
-            */
+
             if (empty($objetives)) {
                 $errors[] = 'Los objetivos del curso son necesarios';
             }
+            */
             if (empty($necesites)) {
                 $errors[] = 'Los requisitos del curso son necesarios';
             }
