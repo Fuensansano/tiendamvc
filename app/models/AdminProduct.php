@@ -36,4 +36,39 @@ class AdminProduct
         ];
         return $this->queryBuilder->query($sql, $params);
     }
+
+    public function createProduct($data)
+    {
+        $sql = 'INSERT INTO products(type, name, description, price, discount, send, image, published, relation1, relation2, relation3, mostSold, new, status, deleted, create_at, updated_at, deleted_at, author, publisher, pages, people, objetives, necesites) 
+                VALUES (:type, :name, :description, :price, :discount, :send, :image, :published, :relation1, :relation2, :relation3, :mostSold, :new, :status, :deleted, :create_at, :updated_at, :deleted_at, :author, :publisher, :pages, :people, :objetives, :necesites)';
+        var_dump($data);
+        $params = [
+            ':type' => $data['type'],
+            ':name' => $data['name'],
+            ':description' => $data['description'],
+            ':price' => $data['price'],
+            ':discount' => $data['discount'],
+            ':send' => $data['send'],
+            ':image' => $data['image'],
+            ':published' => $data['published'],
+            ':relation1' => $data['relation1'],
+            ':relation2' => $data['relation2'],
+            ':relation3' => $data['relation3'],
+            ':mostSold' => $data['mostSold'],
+            ':new' => $data['new'],
+            ':status' => $data['status'],
+            ':deleted' => ProductDeleteState::NOT_DELETED->value,
+            ':create_at' => date('Y-m-d H:i:s'),
+            ':updated_at' => null,
+            ':deleted_at' => null,
+            ':author' => $data['author'],
+            ':publisher' => $data['publisher'],
+            ':pages' => $data['pages'],
+            ':people' => $data['people'],
+            ':objetives' => $data['objetives'],
+            ':necesites' => $data['necesites']
+        ];
+
+        return $this->queryBuilder->query($sql, $params, MysqlReturnTypes::COUNT);
+    }
 }

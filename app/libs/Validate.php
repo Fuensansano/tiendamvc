@@ -34,4 +34,43 @@ class Validate
 
         return $file;
     }
+
+    public static function resizeImage($image, $newWidth)
+    {
+        $file = 'img/' . $image;
+
+        $info = getimagesize($file);
+        $width = $info[0];
+        $height = $info[1];
+        $type = $info['mime'];
+
+        $factor = $newWidth / $width;
+        $newHeight = $factor * $height;
+
+        $image = imagecreatefromjpeg($file);
+
+        $canvas = imagecreatetruecolor($newWidth, $newHeight);
+
+        imagecopyresampled($canvas, $image, 0,0,0,0,$newWidth, $newHeight,$width, $height);
+
+        imagejpeg($canvas, $file, 80);
+    }
+
+    public static function text($string)
+    {
+        $search = ['^', 'delete', 'drop', 'truncate', 'exec', 'system'];
+        $replace = ['-', 'dele*te', 'dr*op', 'trunca*te', 'ex*ec', 'syst*em'];
+        $string = str_replace($search, $replace, $string);
+        $string = addslashes(htmlentities($string));
+
+        return $string;
+    }
+
+    public static function imageFile($file)
+    {
+        $imageArray = getimagesize($file);
+        $imageType = $imageArray[2];
+
+        return (bool) (in_array($imageType, [IMAGETYPE_JPEG, IMAGETYPE_PNG]));
+    }
 }

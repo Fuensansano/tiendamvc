@@ -1,6 +1,5 @@
 <?php
 
-//$errors = [];
 trait ProductValidation
 {
     public static function validateName($name, $errors)

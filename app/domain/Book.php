@@ -27,8 +27,6 @@ class Book implements Validations
 
     public static function validatePages($pages, $errors)
     {
-        var_dump($pages);
-        var_dump(!is_numeric($pages));
         if (!is_numeric($pages)) {
             //$pages = 0;
             $errors[] = 'La cantidad de páginas de un libro debe de ser un número';
