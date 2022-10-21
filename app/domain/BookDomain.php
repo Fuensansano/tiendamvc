@@ -1,6 +1,6 @@
 <?php
 
-class Book implements Validations
+class BookDomain implements Validations
 {
 
     use ProductValidation;

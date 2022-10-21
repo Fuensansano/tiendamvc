@@ -1,6 +1,6 @@
 <?php
 
-class Course implements Validations
+class CourseDomain implements Validations
 {
     use ProductValidation;
 
