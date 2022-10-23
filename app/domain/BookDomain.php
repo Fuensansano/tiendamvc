@@ -38,14 +38,4 @@ class BookDomain implements Validations
         return $errors;
     }
 
-    /*
-
-if (empty($publisher)) {
-    $errors[] = 'La editorial del libro es necesaria';
-}
-if (!is_numeric($pages)) {
-    $pages = 0;
-    $errors[] = 'La cantidad de páginas de un libro debe de ser un número';
-}
-    */
 }

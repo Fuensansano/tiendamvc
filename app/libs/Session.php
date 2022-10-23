@@ -51,4 +51,9 @@ class Session
             header('LOCATION: ' . $whereToRedirect);
         }
     }
+
+    public function getUserId()
+    {
+        return $this->user->id;
+    }
 }

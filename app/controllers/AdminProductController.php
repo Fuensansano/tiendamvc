@@ -13,7 +13,7 @@ class AdminProductController extends Controller
     {
         $session = new Session();
 
-        $session->redirectIfNotLogin( ROOT . 'admin');
+        $session->redirectIfNotLogin(ROOT . 'admin');
 
         $products = $this->model->getProducts();
         $type = $this->model->getConfig('productType');
@@ -64,9 +64,9 @@ class AdminProductController extends Controller
         $type = $_POST['type'] ?? '';
         $name = addslashes(htmlentities($_POST['name'] ?? ''));
         $description = addslashes(htmlentities($_POST['description'] ?? ''));
-        $price = Validate::number((float) ($_POST['price'] ?? 0.0));
-        $discount = Validate::number((float) ($_POST['discount'] ?? 0.0));
-        $send = Validate::number((float) ($_POST['send'] ?? 0.0));
+        $price = Validate::number((float)($_POST['price'] ?? 0.0));
+        $discount = Validate::number((float)($_POST['discount'] ?? 0.0));
+        $send = Validate::number((float)($_POST['send'] ?? 0.0));
         $image = Validate::file($_FILES['image']['name']);
         $published = $_POST['published'] ?? '';
         $relation1 = $_POST['relation1'] != '' ? $_POST['relation1'] : 0;
@@ -82,20 +82,20 @@ class AdminProductController extends Controller
         $necesites = addslashes(htmlentities($_POST['necesites'] ?? ''));
 
         // Validamos la información
-        $errors = CourseDomain::validateName($name,$errors);
-        $errors = CourseDomain::validateDescription($description,$errors);
-        $errors = CourseDomain::validatePrice($price,$errors);
-        $errors = CourseDomain::validateDiscount($discount,$errors);
-        $errors = CourseDomain::validateSendPrice($send,$errors);
-        $errors = CourseDomain::validateSendPrice($send,$errors);
-        $errors = CourseDomain::validateDiscountLowerThanPrice($discount,$price,$errors);
-        $errors = CourseDomain::validatePublishedDate($published,$errors);
+        $errors = CourseDomain::validateName($name, $errors);
+        $errors = CourseDomain::validateDescription($description, $errors);
+        $errors = CourseDomain::validatePrice($price, $errors);
+        $errors = CourseDomain::validateDiscount($discount, $errors);
+        $errors = CourseDomain::validateSendPrice($send, $errors);
+        $errors = CourseDomain::validateSendPrice($send, $errors);
+        $errors = CourseDomain::validateDiscountLowerThanPrice($discount, $price, $errors);
+        $errors = CourseDomain::validatePublishedDate($published, $errors);
         $errors = CourseDomain::validatePeople($people, $errors);
         $errors = CourseDomain::validateObjetives($objetives, $errors);
         $errors = CourseDomain::validateNecesites($necesites, $errors);
 
         if ($image) {
-            if (Validate::imageFile($_FILES['image']['tmp_name'])) {
+            if (Validate::hasCorrectImageFormat($_FILES['image']['tmp_name'])) {
 
                 $image = strtolower($image);
 
@@ -103,21 +103,21 @@ class AdminProductController extends Controller
                     move_uploaded_file($_FILES['image']['tmp_name'], 'img/' . $image);
                     Validate::resizeImage($image, 240);
                 } else {
-                    array_push($errors, 'Error al subir el archivo de imagen');
+                    $errors[] = 'Error al subir el archivo de imagen';
                 }
             } else {
-                array_push($errors, 'El formato de imagen no es aceptado');
+                $errors[] = 'El formato de imagen no es aceptado';
             }
         } else {
-            array_push($errors, 'No he recibido la imagen');
+            $errors[] = 'No he recibido la imagen';
         }
 
         // Creamos el array de datos
         $dataForm = [
-            'type'  => $type,
-            'name'  => $name,
+            'type' => $type,
+            'name' => $name,
             'description' => $description,
-            'people'    => $people,
+            'people' => $people,
             'objetives' => $objetives,
             'necesites' => $necesites,
             'price' => $price,
@@ -133,14 +133,14 @@ class AdminProductController extends Controller
             'status' => $status,
         ];
 
-        if ( $errors ) {
+        if ($errors) {
             $this->viewCreateForm($errors, $dataForm);
             return;
         }
 
         $errors = $this->model->createProduct($dataForm);
 
-        if ( ! $errors ) {
+        if (!$errors) {
             $errors[] = 'Se ha producido un errpr en la inserción en la BD';
             $this->viewCreateForm($errors, $dataForm);
             return;
@@ -165,7 +165,8 @@ class AdminProductController extends Controller
         $price = Validate::number((float)($_POST['price'] ?? ''));
         $discount = Validate::number((float)($_POST['discount'] ?? ''));
         $send = Validate::number((float)($_POST['send'] ?? ''));
-        $image = Validate::file($_FILES['image']['name']);
+        $tempImage = $_FILES['image']['tmp_name'];
+        $imageWithoutSpecialCharacters = Validate::file($_FILES['image']['name']);
         $published = $_POST['published'] ?? '';
         $relation1 = $_POST['relation1'] != '' ? $_POST['relation1'] : 0;
         $relation2 = $_POST['relation2'] != '' ? $_POST['relation2'] : 0;
@@ -180,50 +181,33 @@ class AdminProductController extends Controller
         $pages = Validate::number($_POST['pages'] ?: '');
 
         // Validamos la información
-        $errors = BookDomain::validateName($name,$errors);
-        $errors = BookDomain::validateDescription($description,$errors);
-        $errors = BookDomain::validatePrice($price,$errors);
-        $errors = BookDomain::validateDiscount($discount,$errors);
-        $errors = BookDomain::validateSendPrice($send,$errors);
-        $errors = BookDomain::validateSendPrice($send,$errors);
-        $errors = BookDomain::validateDiscountLowerThanPrice($discount,$price,$errors);
-        $errors = BookDomain::validatePublishedDate($published,$errors);
-        $errors = BookDomain::validateAuthor($author,$errors);
-        $errors = BookDomain::validatePublisher($publisher,$errors);
-        $errors = BookDomain::validatePages($pages,$errors);
+        $errors = BookDomain::validateName($name, $errors);
+        $errors = BookDomain::validateDescription($description, $errors);
+        $errors = BookDomain::validatePrice($price, $errors);
+        $errors = BookDomain::validateDiscount($discount, $errors);
+        $errors = BookDomain::validateSendPrice($send, $errors);
+        $errors = BookDomain::validateSendPrice($send, $errors);
+        $errors = BookDomain::validateDiscountLowerThanPrice($discount, $price, $errors);
+        $errors = BookDomain::validatePublishedDate($published, $errors);
+        $errors = BookDomain::validateAuthor($author, $errors);
+        $errors = BookDomain::validatePublisher($publisher, $errors);
+        $errors = BookDomain::validatePages($pages, $errors);
 
-
-        if ($image) {
-            if (Validate::imageFile($_FILES['image']['tmp_name'])) {
-
-                $image = strtolower($image);
-
-                if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-                    move_uploaded_file($_FILES['image']['tmp_name'], 'img/' . $image);
-                    Validate::resizeImage($image, 240);
-                } else {
-                    array_push($errors, 'Error al subir el archivo de imagen');
-                }
-            } else {
-                array_push($errors, 'El formato de imagen no es aceptado');
-            }
-        } else {
-            array_push($errors, 'No he recibido la imagen');
-        }
+        $errors = BookDomain::validateImage($tempImage, $imageWithoutSpecialCharacters, $errors);
 
         // Creamos el array de datos
         $dataForm = [
-            'type'  => $type,
-            'name'  => $name,
+            'type' => $type,
+            'name' => $name,
             'description' => $description,
-            'author'    => $author,
+            'author' => $author,
             'publisher' => $publisher,
             'price' => $price,
             'discount' => $discount,
             'send' => $send,
             'pages' => $pages,
             'published' => $published,
-            'image' => $image,
+            'image' => $imageWithoutSpecialCharacters,
             'mostSold' => $mostSold,
             'new' => $new,
             'relation1' => $relation1,
@@ -233,14 +217,14 @@ class AdminProductController extends Controller
         ];
 
 
-        if ( $errors ) {
+        if ($errors) {
             $this->viewCreateForm($errors, $dataForm);
             return;
         }
 
         $errors = $this->model->createProduct($dataForm);
 
-        if ( ! $errors ) {
+        if (!$errors) {
             $errors[] = 'Se ha producido un error en la inserción en la BD';
             $this->viewCreateForm($errors, $dataForm);
             return;
@@ -261,9 +245,9 @@ class AdminProductController extends Controller
             $type = $_POST['type'] ?? '';
             $name = Validate::text($_POST['name'] ?? '');
             $description = Validate::text($_POST['description'] ?? '');
-            $price = Validate::number((float) ($_POST['price'] ?? 0.0));
-            $discount = Validate::number((float) ($_POST['discount'] ?? 0.0));
-            $send = Validate::number((float) ($_POST['send'] ?? 0.0));
+            $price = Validate::number((float)($_POST['price'] ?? 0.0));
+            $discount = Validate::number((float)($_POST['discount'] ?? 0.0));
+            $send = Validate::number((float)($_POST['send'] ?? 0.0));
             $image = Validate::file($_FILES['image']['name']);
             $published = $_POST['published'] ?? '';
             $relation1 = $_POST['relation1'] != '' ? $_POST['relation1'] : 0;
@@ -283,55 +267,57 @@ class AdminProductController extends Controller
 
             // Validamos la información
             if (empty($name)) {
-                array_push($errors, 'El nombre del producto es requerido');
+                $errors[] = 'El nombre del producto es requerido';
             }
             if (empty($description)) {
-                array_push($errors, 'La descripción del producto es requerida');
+                $errors[] = 'La descripción del producto es requerida';
             }
-            if ( ! is_numeric($price)) {
-                array_push($errors, 'El precio del producto debe de ser un número');
+            if (!is_numeric($price)) {
+                $errors[] = 'El precio del producto debe de ser un número';
             }
-            if ( ! is_numeric($discount)) {
-                array_push($errors, 'El descuento del producto debe de ser un número');
+            if (!is_numeric($discount)) {
+                $errors[] = 'El descuento del producto debe de ser un número';
             }
-            if (! is_numeric($send)) {
-                array_push($errors, 'Los gastos de envío del producto deben de ser numéricos');
+            if (!is_numeric($send)) {
+                $errors[] = 'Los gastos de envío del producto deben de ser numéricos';
             }
             if (is_numeric($price) && is_numeric($discount) && $price < $discount) {
-                array_push($errors, 'El descuento no puede ser mayor que el precio');
+                $errors[] = 'El descuento no puede ser mayor que el precio';
             }
-            if ( ! Validate::date($published) ) {
-                array_push($errors, 'La fecha o su formato no es correcto');
-            } elseif ( ! Validate::dateDif($published)) {
-                array_push($errors, 'La fecha de publicación no puede ser anterior a hoy');
+            if (!Validate::date($published)) {
+                $errors[] = 'La fecha o su formato no es correcto';
+            } elseif (!Validate::dateDiff($published)) {
+                $errors[] = 'La fecha de publicación no puede ser anterior a hoy';
             }
             if ($type == 1) {
                 if (empty($people)) {
-                    array_push($errors, 'El público objetivo del curso es obligatorio');
+                    $errors[] = 'El público objetivo del curso es obligatorio';
                 }
                 if (empty($objetives)) {
-                    array_push($errors, 'Los objetivos del curso son necesarios');
+                    $errors[] = 'Los objetivos del curso son necesarios';
                 }
                 if (empty($necesites)) {
-                    array_push($errors, 'Los requisitos del curso son necesarios');
+                    $errors[] = 'Los requisitos del curso son necesarios';
                 }
             } elseif ($type == 2) {
                 if (empty($author)) {
-                    array_push($errors, 'El autor del libro es necesario');
+                    $errors[] = 'El autor del libro es necesario';
                 }
                 if (empty($publisher)) {
-                    array_push($errors, 'La editorial del libro es necesaria');
+                    $errors[] = 'La editorial del libro es necesaria';
                 }
-                if ( ! is_numeric($pages)) {
+                if (!is_numeric($pages)) {
                     $pages = 0;
-                    array_push($errors, 'La cantidad de páginas de un libro debe de ser un número');
+                    $errors[] = 'La cantidad de páginas de un libro debe de ser un número';
                 }
             } else {
-                array_push($errors, 'Debes seleccionar un tipo válido');
+                $errors[] = 'Debes seleccionar un tipo válido';
             }
 
+            BookDomain::validateImage($_FILES['image']['tmp_name'], $errors);
+
             if ($image) {
-                if (Validate::imageFile($_FILES['image']['tmp_name'])) {
+                if (Validate::hasCorrectImageFormat($_FILES['image']['tmp_name'])) {
 
                     $image = strtolower($image);
 
@@ -339,22 +325,22 @@ class AdminProductController extends Controller
                         move_uploaded_file($_FILES['image']['tmp_name'], 'img/' . $image);
                         Validate::resizeImage($image, 240);
                     } else {
-                        array_push($errors, 'Error al subir el archivo de imagen');
+                        $errors[] = 'Error al subir el archivo de imagen';
                     }
                 } else {
-                    array_push($errors, 'El formato de imagen no es aceptado');
+                    $errors[] = 'El formato de imagen no es aceptado';
                 }
             }
 
             // Creamos el array de datos
             $dataForm = [
                 'id' => $id,
-                'type'  => $type,
-                'name'  => $name,
+                'type' => $type,
+                'name' => $name,
                 'description' => $description,
-                'author'    => $author,
+                'author' => $author,
                 'publisher' => $publisher,
-                'people'    => $people,
+                'people' => $people,
                 'objetives' => $objetives,
                 'necesites' => $necesites,
                 'price' => $price,
@@ -371,14 +357,14 @@ class AdminProductController extends Controller
                 'status' => $status,
             ];
 
-            if ( ! $errors ) {
+            if (!$errors) {
 
-                if (  count($this->model->updateProduct($dataForm)) == 0 ) {
+                if (count($this->model->updateProduct($dataForm)) == 0) {
 
                     header('location:' . ROOT . 'AdminProduct');
 
                 }
-                array_push($errors, 'Se ha producido un error en la inserción en la BD');
+                $errors[] = 'Se ha producido un error en la inserción en la BD';
             }
 
         }
@@ -424,6 +410,6 @@ class AdminProductController extends Controller
             'product' => $product,
         ];
 
-        $this->view('/admin/products/delete',$data);
+        $this->view('/admin/products/delete', $data);
     }
 }

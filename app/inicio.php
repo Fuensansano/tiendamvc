@@ -7,6 +7,7 @@ define('ROOT', DIRECTORY_SEPARATOR);
 define('APP', ROOT . 'app' . DIRECTORY_SEPARATOR);
 define('URL', '/var/www/tiendamvc/');
 define('VIEWS', URL . APP . 'views/');
+define('IMG_FOLDER', ROOT . 'public/img' . DIRECTORY_SEPARATOR);
 define('ENCRIPTKEY', 'elperrodesanroque');
 define('MIN_LENGTH_NAME',3);
 define('MIN_VALUE_PRICE', 0);

@@ -20,7 +20,8 @@ class LoginController extends Controller
                 'remember' => 'on',
             ];
         } else {
-            $dataForm = null;
+            $dataForm = null; //no refactorizo, me es más cómodo de leer así y además habría que valorar siempre en
+            //un if el isset
         }
 
         $data = [
@@ -37,7 +38,6 @@ class LoginController extends Controller
         $errors = [];
 
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-
             $this->showForgotForm();
             return;
         }

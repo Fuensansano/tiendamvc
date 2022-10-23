@@ -13,21 +13,22 @@ class CoursesController extends Controller
     {
         $session = new Session();
 
-        if ($session->getLogin()) {
+        $session->redirectIfNotLogin(ROOT); // no me hace falta poner un if porque
+        //este método redirige si no está logueado, al redirigir no se va a ejecutar el resto de líneas
+        //seguidas de código
 
-            $courses = $this->model->getCourses();
+       $session->getLogin();
 
-            $data = [
-                'titulo' => 'Cursos en línea',
-                'menu' => true,
-                'active' => 'courses',
-                'data' => $courses,
-            ];
+        $courses = $this->model->getCourses();
 
-            $this->view('courses/index', $data);
+        $data = [
+            'titulo' => 'Cursos en línea',
+            'menu' => true,
+            'active' => 'courses',
+            'data' => $courses,
+        ];
 
-        } else {
-            header('location:' . ROOT);
-        }
+        $this->view('courses/index', $data);
+
     }
 }
